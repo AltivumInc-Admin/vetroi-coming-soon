@@ -40,13 +40,23 @@
             padding: 0 2rem;
         }
 
-        .tagline {
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tagline-line {
             font-family: 'Georgia', 'Times New Roman', serif;
             font-size: 4.5rem;
             font-weight: 300;
             color: #FFFFFF;
             letter-spacing: 0.02em;
-            margin-bottom: 2rem;
             line-height: 1.4;
             text-shadow:
                 0 0 20px rgba(0, 0, 0, 0.9),
@@ -55,6 +65,17 @@
                 0 8px 16px rgba(0, 0, 0, 0.7),
                 2px 2px 4px rgba(0, 0, 0, 1);
             -webkit-text-stroke: 1px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
+        }
+
+        .tagline-line:nth-child(1) {
+            animation-delay: 0.5s;
+        }
+
+        .tagline-line:nth-child(2) {
+            animation-delay: 1.5s;
+            margin-bottom: 2rem;
         }
 
         .coming-soon {
@@ -71,6 +92,9 @@
                 0 8px 16px rgba(0, 0, 0, 0.7),
                 2px 2px 4px rgba(0, 0, 0, 1);
             -webkit-text-stroke: 1px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
+            animation-delay: 2.5s;
         }
 
         .footer {
@@ -81,12 +105,30 @@
             font-size: 0.875rem;
             font-weight: 300;
             color: #FFFFFF;
-            letter-spacing: 0.02em;
+            letter-spacing: 0.08em;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
+            animation-delay: 3.5s;
+        }
+
+        .header {
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+            font-family: 'Helvetica Neue', 'Arial', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: #FFFFFF;
+            letter-spacing: 0.08em;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
+            animation-delay: 4s;
         }
 
         @media (max-width: 768px) {
-            .tagline {
+            .tagline-line {
                 font-size: 2.5rem;
             }
 
@@ -94,20 +136,32 @@
                 font-size: 1.5rem;
             }
 
+            .footer, .header {
+                font-size: 0.65rem;
+            }
+
             .footer {
-                font-size: 0.75rem;
                 bottom: 1rem;
+                right: 1rem;
+            }
+
+            .header {
+                top: 1rem;
                 right: 1rem;
             }
         }
 
         @media (max-width: 480px) {
-            .tagline {
+            .tagline-line {
                 font-size: 1.75rem;
             }
 
             .coming-soon {
                 font-size: 1.25rem;
+            }
+
+            .footer, .header {
+                font-size: 0.6rem;
             }
         }
     </style>
@@ -119,11 +173,13 @@
     </video>
 
     <div class="overlay">
+        <div class="header">EST. 2025</div>
         <div class="content">
-            <div class="tagline">Your Service.<br>Your Return on Investment.</div>
+            <div class="tagline-line">Your Service.</div>
+            <div class="tagline-line">Your Return on Investment.</div>
             <div class="coming-soon">Coming Soon</div>
         </div>
-        <div class="footer">Altivum Inc</div>
+        <div class="footer">ALTIVUM INC | VETERAN OWNED & OPERATED</div>
     </div>
 </body>
 </html>
