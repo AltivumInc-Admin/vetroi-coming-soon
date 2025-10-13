@@ -15,12 +15,52 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
+            font-family: 'Helvetica Neue', 'Arial', sans-serif;
         }
 
         video {
+            position: fixed;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            z-index: -1;
+        }
+
+        .content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+        }
+
+        .tagline {
+            font-size: 3rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .coming-soon {
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+        }
+
+        @media (max-width: 768px) {
+            .tagline {
+                font-size: 2rem;
+                padding: 0 1rem;
+            }
+
+            .coming-soon {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -29,5 +69,10 @@
         <source src="https://altivum-media-assets.s3.us-east-1.amazonaws.com/us_flag.mov" type="video/mp4">
         Your browser does not support the video tag.
     </video>
+
+    <div class="content">
+        <div class="tagline">Your Service. Your Return on Investment.</div>
+        <div class="coming-soon">Coming Soon</div>
+    </div>
 </body>
 </html>
