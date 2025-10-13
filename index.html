@@ -100,16 +100,28 @@
         .footer {
             position: absolute;
             bottom: 1.5rem;
-            right: 2rem;
+            left: 2rem;
             font-family: 'Helvetica Neue', 'Arial', sans-serif;
-            font-size: 0.875rem;
-            font-weight: 300;
-            color: #FFFFFF;
-            letter-spacing: 0.08em;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
             opacity: 0;
             animation: fadeIn 2s ease-out forwards;
             animation-delay: 3.5s;
+        }
+
+        .footer-company {
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .footer-descriptor {
+            font-size: 0.75rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
         }
 
         .header {
@@ -117,10 +129,11 @@
             top: 1.5rem;
             right: 2rem;
             font-family: 'Helvetica Neue', 'Arial', sans-serif;
-            font-size: 0.875rem;
+            font-size: 0.75rem;
             font-weight: 300;
-            color: #FFFFFF;
-            letter-spacing: 0.08em;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 0.25rem;
+            text-transform: uppercase;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
             opacity: 0;
             animation: fadeIn 2s ease-out forwards;
@@ -136,13 +149,9 @@
                 font-size: 1.5rem;
             }
 
-            .footer, .header {
-                font-size: 0.65rem;
-            }
-
             .footer {
                 bottom: 1rem;
-                right: 1rem;
+                left: 1rem;
             }
 
             .header {
@@ -160,8 +169,12 @@
                 font-size: 1.25rem;
             }
 
-            .footer, .header {
-                font-size: 0.6rem;
+            .footer-company, .footer-descriptor {
+                font-size: 0.625rem;
+            }
+
+            .header {
+                font-size: 0.625rem;
             }
         }
     </style>
@@ -179,7 +192,10 @@
             <div class="tagline-line">Your Return on Investment.</div>
             <div class="coming-soon">Coming Soon</div>
         </div>
-        <div class="footer">ALTIVUM INC | VETERAN OWNED & OPERATED</div>
+        <div class="footer">
+            <div class="footer-company">ALTIVUM INC.</div>
+            <div class="footer-descriptor">Veteran Owned & Operated</div>
+        </div>
     </div>
 </body>
 </html>
