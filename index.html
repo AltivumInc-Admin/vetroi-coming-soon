@@ -63,6 +63,21 @@
             }
         }
 
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+            }
+            15% {
+                opacity: 1;
+            }
+            85% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
         .tagline-line {
             font-family: 'Georgia', 'Times New Roman', serif;
             font-size: 4.5rem;
@@ -136,6 +151,32 @@
             transform: translateY(-1px);
         }
 
+        .tagline {
+            margin-top: 3rem;
+            font-family: 'Helvetica Neue', 'Arial', sans-serif;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            animation: fadeInOut 6s ease-in-out forwards;
+            animation-delay: 4.5s;
+        }
+
+        .tagline-line1 {
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .tagline-line2 {
+            font-size: 0.75rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
         .footer {
             position: absolute;
             bottom: 1.5rem;
@@ -203,6 +244,14 @@
                 padding: 0.875rem 2rem;
             }
 
+            .tagline {
+                margin-top: 2rem;
+            }
+
+            .tagline-line1, .tagline-line2 {
+                font-size: 0.65rem;
+            }
+
             .footer {
                 bottom: 1rem;
                 left: 1rem;
@@ -228,6 +277,14 @@
                 padding: 0.75rem 1.5rem;
             }
 
+            .tagline {
+                margin-top: 1.5rem;
+            }
+
+            .tagline-line1, .tagline-line2 {
+                font-size: 0.6rem;
+            }
+
             .footer-company, .footer-descriptor {
                 font-size: 0.625rem;
             }
@@ -249,6 +306,10 @@
         <div class="content">
             <div class="coming-soon">Coming Soon</div>
             <a href="stay-informed.html" class="cta-button">Stay Informed</a>
+            <div class="tagline">
+                <div class="tagline-line1">Your Service.</div>
+                <div class="tagline-line2">Your ROI.</div>
+            </div>
         </div>
         <div class="footer">
             <a href="https://altivum.ai" target="_blank" rel="noopener noreferrer">
