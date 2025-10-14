@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You - Altivum™ Inc.</title>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Thank You - Altivum™ Inc.">
+    <meta property="og:description" content="Thank you for your interest. Veteran-owned software company.">
+    <meta property="og:image" content="https://coming-soon.altivum.ai/flag.png">
+    <meta property="og:url" content="https://coming-soon.altivum.ai/thank-you.html">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            min-height: 100%;
+            font-family: 'Helvetica Neue', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #001f3f 0%, #002868 100%);
+            color: #FFFFFF;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .logo {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+            animation-delay: 0.3s;
+        }
+
+        .tagline {
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+            animation-delay: 0.6s;
+        }
+
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(76, 175, 80, 0.2);
+            border: 3px solid #4CAF50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards, scaleIn 0.5s ease-out forwards;
+            animation-delay: 0.9s;
+        }
+
+        .checkmark svg {
+            width: 50px;
+            height: 50px;
+            stroke: #4CAF50;
+            stroke-width: 3;
+            fill: none;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: drawCheck 0.8s ease-out forwards;
+            animation-delay: 1.2s;
+        }
+
+        @keyframes drawCheck {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.8);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        h1 {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+            animation-delay: 1.5s;
+        }
+
+        .message {
+            font-size: 1.125rem;
+            font-weight: 300;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 500px;
+            margin: 0 auto 3rem;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+            animation-delay: 1.8s;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+            animation-delay: 2.1s;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            font-size: 0.875rem;
+            font-weight: 400;
+            font-family: 'Helvetica Neue', 'Arial', sans-serif;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: rgba(255, 255, 255, 0.9);
+            color: #002868;
+        }
+
+        .btn-primary:hover {
+            background: #FFFFFF;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-secondary:hover {
+            border-color: #FFFFFF;
+            color: #FFFFFF;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+            animation-delay: 2.4s;
+        }
+
+        .footer-text {
+            font-size: 0.75rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.08em;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #FFFFFF;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            .message {
+                font-size: 1rem;
+            }
+
+            .actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">Altivum<sup style="font-size: 0.6em;">™</sup> Inc.</div>
+        <div class="tagline">Veteran Owned & Operated</div>
+
+        <div class="checkmark">
+            <svg viewBox="0 0 52 52">
+                <polyline points="14 27 22 35 38 17" />
+            </svg>
+        </div>
+
+        <h1>You're All Set!</h1>
+
+        <p class="message">
+            Thank you for your interest. We'll notify you as soon as we launch.
+            In the meantime, feel free to learn more about Altivum and our mission.
+        </p>
+
+        <div class="actions">
+            <a href="https://altivum.ai" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                Visit Altivum.ai
+            </a>
+            <a href="index.html" class="btn btn-secondary">
+                Back to Home
+            </a>
+        </div>
+
+        <div class="footer">
+            <div class="footer-text">
+                <a href="https://altivum.ai" class="footer-link" target="_blank" rel="noopener noreferrer">
+                    ALTIVUM INC.
+                </a>
+                &nbsp;|&nbsp;
+                EST. 2025
+            </div>
+        </div>
+    </div>
+</body>
+</html>

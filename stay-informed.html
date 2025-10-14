@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stay Informed - Altivum™ Inc.</title>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Stay Informed - Altivum™ Inc.">
+    <meta property="og:description" content="Get notified when we launch. Veteran-owned software company.">
+    <meta property="og:image" content="https://coming-soon.altivum.ai/flag.png">
+    <meta property="og:url" content="https://coming-soon.altivum.ai/stay-informed.html">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            min-height: 100%;
+            font-family: 'Helvetica Neue', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #001f3f 0%, #002868 100%);
+            color: #FFFFFF;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .description {
+            font-size: 1rem;
+            font-weight: 300;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .required {
+            color: #FF6B6B;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            font-size: 1rem;
+            font-family: 'Helvetica Neue', 'Arial', sans-serif;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid transparent;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #FFFFFF;
+            background: #FFFFFF;
+        }
+
+        input::placeholder {
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 400;
+            font-family: 'Helvetica Neue', 'Arial', sans-serif;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            background: rgba(255, 255, 255, 0.9);
+            color: #002868;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #FFFFFF;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            background: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid #FF6B6B;
+            color: #FFE5E5;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .back-link a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.875rem;
+            letter-spacing: 0.05em;
+            transition: color 0.3s ease;
+        }
+
+        .back-link a:hover {
+            color: #FFFFFF;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-text {
+            font-size: 0.75rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.08em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            .form-container {
+                padding: 2rem 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Altivum<sup style="font-size: 0.6em;">™</sup> Inc.</div>
+            <div class="tagline">Veteran Owned & Operated</div>
+        </div>
+
+        <div class="form-container">
+            <h1>Stay Informed</h1>
+            <p class="description">
+                Be the first to know when we launch. Enter your information below and we'll notify you.
+            </p>
+
+            <div id="error-message" class="error-message"></div>
+
+            <form id="signup-form">
+                <div class="form-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="you@example.com"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="name">Full Name <span class="required">*</span></label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="John Smith"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="organization">Organization (Optional)</label>
+                    <input
+                        type="text"
+                        id="organization"
+                        name="organization"
+                        placeholder="Company or University Name"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="role">I am a... (Optional)</label>
+                    <select id="role" name="role">
+                        <option value="">Select one</option>
+                        <option value="veteran">Veteran</option>
+                        <option value="admin">University Administrator</option>
+                        <option value="recruiter">Recruiter</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submit-btn">
+                    Notify Me
+                </button>
+            </form>
+
+            <div class="back-link">
+                <a href="index.html">← Back to Home</a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-text">EST. 2025</div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('signup-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const errorMessage = document.getElementById('error-message');
+        const API_ENDPOINT = 'https://g2zsa1gkjg.execute-api.us-east-1.amazonaws.com/prod/submit';
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('show');
+            setTimeout(() => {
+                errorMessage.classList.remove('show');
+            }, 5000);
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            errorMessage.classList.remove('show');
+
+            // Get form data
+            const formData = {
+                email: document.getElementById('email').value.trim(),
+                name: document.getElementById('name').value.trim(),
+                organization: document.getElementById('organization').value.trim(),
+                role: document.getElementById('role').value
+            };
+
+            try {
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Success - redirect to thank you page
+                    window.location.href = 'thank-you.html';
+                } else if (response.status === 409) {
+                    // Duplicate email
+                    showError(data.message || 'This email is already registered.');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Notify Me';
+                } else {
+                    // Other error
+                    showError(data.error || 'Something went wrong. Please try again.');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Notify Me';
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                showError('Network error. Please check your connection and try again.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Notify Me';
+            }
+        });
+    </script>
+</body>
+</html>
