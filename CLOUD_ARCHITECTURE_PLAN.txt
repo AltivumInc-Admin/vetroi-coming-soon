@@ -1,0 +1,459 @@
+================================================================================
+VETROI COMING SOON - CLOUD ARCHITECTURE PLAN
+================================================================================
+Project: VetROI Coming Soon "Stay Informed" System
+Date: October 13, 2025
+Purpose: Capture email signups for product launch notifications
+
+================================================================================
+ARCHITECTURE OVERVIEW
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────┐
+│                         USER BROWSER                             │
+└────────────────┬────────────────────────────────────────────────┘
+                 │
+                 │ HTTPS
+                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    AWS AMPLIFY HOSTING                           │
+│  ┌──────────────────┐      ┌──────────────────┐                │
+│  │  index.html      │      │ stay-informed.html│                │
+│  │  (Landing Page)  │─────▶│  (Form Page)      │                │
+│  └──────────────────┘      └──────────────────┘                │
+└─────────────────────────────────────┬───────────────────────────┘
+                                      │
+                                      │ POST /submit
+                                      │ (Form Data)
+                                      ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    API GATEWAY (REST API)                        │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │  Endpoint: /submit                                         │ │
+│  │  Method: POST                                              │ │
+│  │  CORS: coming-soon.altivum.ai                             │ │
+│  │  Throttling: 100 req/sec                                  │ │
+│  │  Request Validation: Schema enforcement                    │ │
+│  └────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────┬───────────────────────────┘
+                                      │
+                                      │ Invoke
+                                      ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    AWS LAMBDA FUNCTION                           │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │  Function: vetroi-submit-handler                          │ │
+│  │  Runtime: Node.js 20.x                                    │ │
+│  │  Memory: 256 MB                                           │ │
+│  │  Timeout: 10 seconds                                      │ │
+│  │                                                            │ │
+│  │  Logic:                                                    │ │
+│  │    1. Validate email format                               │ │
+│  │    2. Check for duplicates (query DynamoDB)               │ │
+│  │    3. Save to DynamoDB                                    │ │
+│  │    4. (Optional) Trigger SES confirmation email           │ │
+│  │    5. Log to CloudWatch                                   │ │
+│  │    6. Return success/error response                       │ │
+│  └────────────────────────────────────────────────────────────┘ │
+└─────────────┬───────────────────────────┬───────────────────────┘
+              │                           │
+              │ Write                     │ Log
+              ▼                           ▼
+┌──────────────────────────┐   ┌──────────────────────────┐
+│   DYNAMODB TABLE         │   │   CLOUDWATCH LOGS        │
+│                          │   │                          │
+│  Table: vetroi-signups   │   │  Log Group:              │
+│  Partition Key: email    │   │  /aws/lambda/vetroi-*    │
+│  Sort Key: timestamp     │   │                          │
+│                          │   │  Metrics:                │
+│  Attributes:             │   │  - Submission count      │
+│  - email (string)        │   │  - Error rate            │
+│  - name (string)         │   │  - Duplicate attempts    │
+│  - timestamp (number)    │   │                          │
+│  - organization (string) │   │  Alarms:                 │
+│  - role (string)         │   │  - Error rate > 5%       │
+│  - ipAddress (string)    │   │  - Unusual traffic spike │
+│  - userAgent (string)    │   └──────────────────────────┘
+│                          │
+│  Indexes:                │
+│  - GSI: timestamp-index  │
+│    (for date queries)    │
+│                          │
+│  Backup: Point-in-time   │
+│  TTL: None               │
+└──────────────────────────┘
+
+
+================================================================================
+DETAILED COMPONENT SPECIFICATIONS
+================================================================================
+
+1. API GATEWAY CONFIGURATION
+────────────────────────────────────────────────────────────────────
+
+Type: REST API (not HTTP API - need request validation)
+
+Endpoint Structure:
+  POST /prod/submit
+  Headers: Content-Type: application/json
+  Body: {
+    "email": "veteran@example.com",
+    "name": "John Smith",
+    "organization": "US Army (optional)",
+    "role": "veteran" (optional)
+  }
+
+Security:
+  CORS Configuration:
+    - Origin: https://coming-soon.altivum.ai
+    - Methods: POST, OPTIONS
+    - Headers: Content-Type
+  Rate Limiting: 100 requests/second per IP
+  Request Throttling: 10,000 requests/day burst
+  Request Validation:
+    - Email: Required, valid format
+    - Name: Required, 2-100 chars
+    - Organization: Optional, max 200 chars
+    - Role: Optional, enum ['veteran', 'admin', 'other']
+
+Response Codes:
+  200: Success
+  400: Validation error
+  409: Email already registered
+  429: Rate limit exceeded
+  500: Server error
+
+
+2. LAMBDA FUNCTION DESIGN
+────────────────────────────────────────────────────────────────────
+
+Function Name: vetroi-submit-handler
+Runtime: Node.js 20.x (LTS)
+
+Environment Variables:
+  TABLE_NAME=vetroi-signups
+  REGION=us-east-1
+  SES_ENABLED=false (set true when ready)
+  SES_FROM_EMAIL=noreply@altivum.ai
+  ALLOWED_ORIGINS=https://coming-soon.altivum.ai
+
+IAM Role Permissions:
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:PutItem",
+        "dynamodb:GetItem",
+        "dynamodb:Query"
+      ],
+      "Resource": "arn:aws:dynamodb:us-east-1:*:table/vetroi-signups"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:us-east-1:*:*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ses:SendEmail"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "ses:FromAddress": "noreply@altivum.ai"
+        }
+      }
+    }
+  ]
+}
+
+Processing Logic:
+  1. Parse and validate request body
+  2. Sanitize inputs (prevent XSS)
+  3. Check if email exists (GetItem on DynamoDB)
+  4. If duplicate: Return 409 with friendly message
+  5. Generate timestamp (Unix epoch)
+  6. Capture metadata: IP, User-Agent, referrer
+  7. Write to DynamoDB
+  8. (Optional) Send SES confirmation email
+  9. Log success metrics to CloudWatch
+  10. Return success response
+
+Error Handling:
+  - Retry logic for DynamoDB throttling (3 attempts)
+  - Circuit breaker for SES failures (don't block submission)
+  - Structured error logging with correlation IDs
+
+
+3. DYNAMODB TABLE SCHEMA
+────────────────────────────────────────────────────────────────────
+
+Table Name: vetroi-signups
+
+Capacity Mode: On-Demand (pay per request)
+  Why: Unpredictable traffic patterns for coming soon pages
+  Cost: $1.25 per million writes, $0.25 per million reads
+
+Primary Key:
+  Partition Key: email (String) - Ensures uniqueness
+  Sort Key: timestamp (Number) - Unix timestamp in milliseconds
+
+Attributes:
+{
+  "email": "veteran@example.com",           // PK
+  "timestamp": 1704067200000,                // SK (milliseconds)
+  "name": "John Smith",
+  "organization": "Stanford University",     // Optional
+  "role": "admin",                           // Optional
+  "ipAddress": "192.168.1.1",               // For analytics
+  "userAgent": "Mozilla/5.0...",            // For analytics
+  "referrer": "https://linkedin.com/...",   // Optional
+  "source": "landing_page"                   // Track different sources
+}
+
+Global Secondary Index (GSI):
+  Index Name: timestamp-index
+  Partition Key: source (String)
+  Sort Key: timestamp (Number)
+  Purpose: Query all signups by date range
+  Projection: ALL attributes
+
+Features:
+  - Point-in-Time Recovery: Enabled (backup last 35 days)
+  - Encryption: AWS managed keys (default)
+  - TTL: None (keep all data)
+  - Stream: Disabled (not needed yet)
+
+
+4. CLOUDWATCH MONITORING
+────────────────────────────────────────────────────────────────────
+
+Log Groups:
+  - /aws/lambda/vetroi-submit-handler - All Lambda logs
+  - /aws/apigateway/vetroi-api - API Gateway access logs
+
+Custom Metrics:
+  - SubmissionCount - Total successful submissions
+  - DuplicateAttempts - Count of duplicate email attempts
+  - ValidationErrors - Count of malformed requests
+  - DynamoDBErrors - Database operation failures
+
+CloudWatch Alarms:
+  1. High Error Rate
+     - Metric: Lambda errors > 5% in 5 minutes
+     - Action: SNS notification to your email
+
+  2. Unusual Traffic
+     - Metric: Submissions > 100 in 1 minute
+     - Action: SNS notification (potential bot attack)
+
+  3. DynamoDB Throttling
+     - Metric: ThrottledRequests > 0
+     - Action: SNS notification
+
+Dashboard:
+  - Real-time submission count
+  - Geographic distribution (from IP)
+  - Error rate over time
+  - Average response latency
+
+
+================================================================================
+DATA FLOW DIAGRAM
+================================================================================
+
+User fills form → Browser validation → POST to API Gateway
+                                              ↓
+                                    Validate request schema
+                                              ↓
+                                    Invoke Lambda function
+                                              ↓
+                                    Parse & sanitize input
+                                              ↓
+                               Check DynamoDB for existing email
+                                    ↙            ↘
+                            Email exists      Email new
+                                ↓                  ↓
+                        Return 409 error    Save to DynamoDB
+                                                   ↓
+                                        (Optional) Send SES email
+                                                   ↓
+                                            Log to CloudWatch
+                                                   ↓
+                                            Return 200 success
+                                                   ↓
+                                        Show thank you page
+
+
+================================================================================
+SECURITY ARCHITECTURE
+================================================================================
+
+1. Input Validation (Defense in Depth)
+   - Browser: Client-side HTML5 validation
+   - API Gateway: JSON schema validation
+   - Lambda: Secondary validation + sanitization
+
+2. CORS Policy
+{
+  "allowedOrigins": ["https://coming-soon.altivum.ai"],
+  "allowedMethods": ["POST"],
+  "allowedHeaders": ["Content-Type"],
+  "maxAge": 3600
+}
+
+3. Rate Limiting
+   - API Gateway: 100 req/sec per IP
+   - DynamoDB: On-demand (auto-scales)
+   - Lambda: Concurrent execution limit: 10 (adjustable)
+
+4. Data Protection
+   - At Rest: DynamoDB encryption (AWS KMS)
+   - In Transit: TLS 1.2+ only (enforced by API Gateway)
+   - PII Handling: Email is the only sensitive data
+
+5. Optional: AWS WAF
+   - Not required initially, but can add:
+     * Block common SQL injection patterns
+     * Block known malicious IPs
+     * Rate limit by country
+   - Cost: ~$5-10/month
+
+
+================================================================================
+COST BREAKDOWN (MONTHLY ESTIMATES)
+================================================================================
+
+SCENARIO: 1,000 signups/month
+────────────────────────────────────────────────────────────────────
+Service              Usage                                    Cost
+────────────────────────────────────────────────────────────────────
+API Gateway          1,000 requests                          $0.00
+Lambda               1,000 invocations × 256MB × 200ms avg   $0.00
+DynamoDB             1,000 writes + 1,000 reads              $0.00
+CloudWatch           Logs + metrics                          $0.00
+Data Transfer        Minimal (<1GB)                          $0.00
+SES (if enabled)     1,000 emails                            $0.10
+────────────────────────────────────────────────────────────────────
+TOTAL                                                        ~$0.10/month
+
+
+SCENARIO: 10,000 signups/month (viral)
+────────────────────────────────────────────────────────────────────
+Service              Usage                                    Cost
+────────────────────────────────────────────────────────────────────
+API Gateway          10,000 requests                         $0.035
+Lambda               10,000 invocations                      $0.20
+DynamoDB             10,000 writes + reads                   $0.25
+CloudWatch           Standard monitoring                     $2.00
+────────────────────────────────────────────────────────────────────
+TOTAL                                                        ~$2.50/month
+
+Bottom Line: Essentially free for your use case, scales automatically.
+
+
+================================================================================
+DEPLOYMENT STRATEGY
+================================================================================
+
+Phase 1: Core Infrastructure (Day 1)
+  1. Create DynamoDB table
+  2. Deploy Lambda function
+  3. Create API Gateway endpoint
+  4. Configure CORS
+  5. Test with Postman/curl
+
+Phase 2: Frontend Integration (Day 1)
+  1. Create stay-informed.html form page
+  2. Add form validation
+  3. Connect to API endpoint
+  4. Add thank you page
+  5. Deploy to Amplify
+
+Phase 3: Monitoring (Day 2)
+  1. Set up CloudWatch dashboard
+  2. Configure SNS email alerts
+  3. Test error scenarios
+
+Phase 4: Optional Enhancements (Later)
+  1. Enable SES confirmation emails
+  2. Add email export functionality
+  3. Build admin dashboard to view signups
+  4. Integrate with Mailchimp via Lambda
+
+
+================================================================================
+INFRASTRUCTURE AS CODE
+================================================================================
+
+Will provide:
+  1. AWS CLI commands - Quick manual setup
+  2. CloudFormation template - One-click deployment (YAML)
+  3. Terraform config - If you prefer Terraform
+
+Recommendation: Start with AWS CLI for learning, migrate to CloudFormation
+for production repeatability.
+
+
+================================================================================
+DATA EXPORT & MANAGEMENT
+================================================================================
+
+Export Emails Script:
+────────────────────────────────────────────────────────────────────
+aws dynamodb scan \
+  --table-name vetroi-signups \
+  --projection-expression "email,#n,#ts" \
+  --expression-attribute-names '{"#n":"name","#ts":"timestamp"}' \
+  --output json | jq -r '.Items[] | "\(.email.S),\(.name.S)"' > signups.csv
+
+
+Admin Dashboard (Optional - Future):
+  - Simple React app hosted on Amplify
+  - Cognito authentication
+  - View/export/search signups
+  - Send test emails
+  - Analytics charts
+
+
+================================================================================
+DISASTER RECOVERY
+================================================================================
+
+- DynamoDB Point-in-Time Recovery: Enabled (restore to any point in last 35 days)
+- Lambda Versioning: Enabled (rollback to previous versions)
+- API Gateway Stages: Use 'prod' stage with rollback capability
+- Backup Strategy: Daily automated backups to S3 (via Lambda)
+
+
+================================================================================
+NEXT STEPS - WHAT WE NEED
+================================================================================
+
+1. AWS Account Access:
+   - AWS CLI configured or Console access?
+
+2. Region Preference:
+   - Recommend us-east-1 (cheapest, most features)
+   - Or us-west-2 if you prefer West Coast
+
+3. Email Confirmation:
+   - Skip for now, or set up SES?
+   - If yes, need to verify altivum.ai domain
+
+4. Deployment Method:
+   - AWS CLI commands (guided)
+   - CloudFormation (one-click)
+   - Or use aws-cloud-architect agent to deploy
+
+
+================================================================================
+END OF DOCUMENT
+================================================================================
