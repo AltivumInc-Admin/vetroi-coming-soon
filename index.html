@@ -126,8 +126,18 @@
             display: flex;
             gap: 1rem;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             flex-wrap: wrap;
+        }
+
+        .cta-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
+            animation-delay: 2.5s;
         }
 
         .cta-button {
@@ -143,9 +153,6 @@
             background: rgba(255, 255, 255, 0.95);
             border-radius: 4px;
             transition: all 0.3s ease;
-            opacity: 0;
-            animation: fadeIn 2s ease-out forwards;
-            animation-delay: 2.5s;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
 
@@ -166,6 +173,16 @@
 
         .cta-button.secondary:hover {
             background: rgba(0, 40, 104, 1);
+        }
+
+        .cta-subtext {
+            font-family: 'Helvetica Neue', 'Arial', sans-serif;
+            font-size: 0.6875rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
         }
 
         .tagline {
@@ -265,6 +282,10 @@
                 padding: 0.875rem 2rem;
             }
 
+            .cta-subtext {
+                font-size: 0.625rem;
+            }
+
             .tagline {
                 margin-top: 2rem;
             }
@@ -302,6 +323,10 @@
                 padding: 0.75rem 1.5rem;
             }
 
+            .cta-subtext {
+                font-size: 0.6rem;
+            }
+
             .tagline {
                 margin-top: 1.5rem;
             }
@@ -335,8 +360,13 @@
             </div>
             <div class="coming-soon">Coming Soon</div>
             <div class="cta-container">
-                <a href="stay-informed.html" class="cta-button">Stay Informed</a>
-                <a href="pilot.html" class="cta-button secondary">Pilot Program</a>
+                <div class="cta-wrapper">
+                    <a href="stay-informed.html" class="cta-button">Stay Informed</a>
+                    <span class="cta-subtext">Register for the Beta</span>
+                </div>
+                <div class="cta-wrapper">
+                    <a href="pilot.html" class="cta-button secondary">Pilot Program</a>
+                </div>
             </div>
         </div>
         <div class="footer">
