@@ -122,6 +122,14 @@
             margin-bottom: 2rem;
         }
 
+        .cta-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
         .cta-button {
             display: inline-block;
             padding: 1rem 2.5rem;
@@ -149,6 +157,15 @@
 
         .cta-button:active {
             transform: translateY(-1px);
+        }
+
+        .cta-button.secondary {
+            background: rgba(0, 40, 104, 0.9);
+            color: #FFFFFF;
+        }
+
+        .cta-button.secondary:hover {
+            background: rgba(0, 40, 104, 1);
         }
 
         .tagline {
@@ -239,6 +256,10 @@
                 font-size: 2rem;
             }
 
+            .cta-container {
+                gap: 0.75rem;
+            }
+
             .cta-button {
                 font-size: 0.75rem;
                 padding: 0.875rem 2rem;
@@ -270,6 +291,10 @@
 
             .coming-soon {
                 font-size: 1.5rem;
+            }
+
+            .cta-container {
+                gap: 0.5rem;
             }
 
             .cta-button {
@@ -309,7 +334,10 @@
                 <div class="tagline-line2">Your ROI.</div>
             </div>
             <div class="coming-soon">Coming Soon</div>
-            <a href="stay-informed.html" class="cta-button">Stay Informed</a>
+            <div class="cta-container">
+                <a href="stay-informed.html" class="cta-button">Stay Informed</a>
+                <a href="pilot.html" class="cta-button secondary">Pilot Program</a>
+            </div>
         </div>
         <div class="footer">
             <a href="https://altivum.ai" target="_blank" rel="noopener noreferrer">
