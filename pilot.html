@@ -127,14 +127,19 @@
             box-shadow: 0 4px 12px rgba(0, 40, 104, 0.3);
         }
 
-        .auth-button:hover {
+        .auth-button:hover:not(:disabled) {
             background: #003a8c;
             transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(0, 40, 104, 0.4);
         }
 
-        .auth-button:active {
+        .auth-button:active:not(:disabled) {
             transform: translateY(0);
+        }
+
+        .auth-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         /* Main Content Styles */
@@ -367,8 +372,19 @@
     <div class="auth-overlay" id="authOverlay">
         <div class="auth-modal">
             <h1>VetROI Pilot Program</h1>
-            <p>Enter password to access</p>
+            <p>Sign in to access pilot resources</p>
             <form class="auth-form" id="authForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                        autocomplete="email"
+                        placeholder="your.email@example.com"
+                    >
+                </div>
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input
@@ -376,14 +392,14 @@
                         id="password"
                         name="password"
                         required
-                        autocomplete="off"
-                        placeholder="Enter pilot password"
+                        autocomplete="current-password"
+                        placeholder="Enter your password"
                     >
                 </div>
                 <div class="error-message" id="errorMessage">
-                    Incorrect password. Please try again.
+                    Invalid credentials. Please try again.
                 </div>
-                <button type="submit" class="auth-button">Access Pilot</button>
+                <button type="submit" class="auth-button" id="authButton">Sign In</button>
             </form>
         </div>
     </div>
@@ -393,45 +409,79 @@
         <div class="pilot-header">
             <h1 class="pilot-title">VetROI Pilot 2025</h1>
             <div class="header-actions">
-                <a href="index.html" class="home-link">Home</a>
+                <a href="https://coming-soon.altivum.ai/" class="home-link">Home</a>
                 <button class="logout-button" id="logoutButton">Logout</button>
             </div>
         </div>
 
         <div class="file-container">
             <div class="files-grid" id="filesGrid">
-                <!-- Files will be added here dynamically -->
-                <a href="VetROI Pilot Welcome Letter.pdf" class="file-card" download>
+                <!-- Files will be loaded dynamically -->
+                <div class="file-card" data-file-key="VetROI-Pilot-Welcome-Letter.pdf">
                     <div class="file-icon">📋</div>
                     <div class="file-info">
                         <div class="file-name">VetROI Pilot Welcome Letter</div>
                         <div class="file-description">Official welcome letter for the VetROI pilot program participants</div>
                     </div>
                     <div class="file-meta">PDF • Click to download</div>
-                </a>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- AWS Cognito SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/amazon-cognito-identity-js@6.3.7/dist/amazon-cognito-identity.min.js"></script>
+
     <script>
-        // Authentication Configuration
-        const PILOT_PASSWORD = 'vetroi_apsu_2025';
-        const STORAGE_KEY = 'vetroi_pilot_access';
+        // AWS Cognito Configuration
+        const COGNITO_CONFIG = {
+            UserPoolId: 'us-east-1_78cO1ugxw',
+            ClientId: '21hctfjm11g5p9odpggbrb2kpm',
+            Region: 'us-east-1'
+        };
+
+        const API_ENDPOINT = 'https://g80yjie0je.execute-api.us-east-1.amazonaws.com/prod/get-file';
+
+        // Initialize Cognito User Pool
+        const poolData = {
+            UserPoolId: COGNITO_CONFIG.UserPoolId,
+            ClientId: COGNITO_CONFIG.ClientId
+        };
+        const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
         // DOM Elements
         const authOverlay = document.getElementById('authOverlay');
         const mainContent = document.getElementById('mainContent');
         const authForm = document.getElementById('authForm');
+        const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
         const errorMessage = document.getElementById('errorMessage');
+        const authButton = document.getElementById('authButton');
         const logoutButton = document.getElementById('logoutButton');
+        const filesGrid = document.getElementById('filesGrid');
+
+        let currentSession = null;
 
         // Check authentication on load
         function checkAuth() {
-            const isAuthenticated = localStorage.getItem(STORAGE_KEY);
+            const cognitoUser = userPool.getCurrentUser();
 
-            if (isAuthenticated === 'true') {
-                showMainContent();
+            if (cognitoUser) {
+                cognitoUser.getSession((err, session) => {
+                    if (err) {
+                        console.error('Session error:', err);
+                        showAuthModal();
+                        return;
+                    }
+
+                    if (session.isValid()) {
+                        currentSession = session;
+                        showMainContent();
+                        setupFileDownloads();
+                    } else {
+                        showAuthModal();
+                    }
+                });
             } else {
                 showAuthModal();
             }
@@ -441,7 +491,7 @@
         function showAuthModal() {
             authOverlay.classList.remove('hidden');
             mainContent.classList.remove('visible');
-            passwordInput.focus();
+            emailInput.focus();
         }
 
         // Show main content
@@ -453,78 +503,120 @@
         // Handle form submission
         authForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            errorMessage.classList.remove('visible');
+            authButton.disabled = true;
+            authButton.textContent = 'Signing In...';
 
-            const enteredPassword = passwordInput.value;
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
 
-            if (enteredPassword === PILOT_PASSWORD) {
-                // Correct password
-                localStorage.setItem(STORAGE_KEY, 'true');
-                errorMessage.classList.remove('visible');
-                passwordInput.value = '';
-                showMainContent();
-            } else {
-                // Incorrect password
-                errorMessage.classList.add('visible');
-                passwordInput.value = '';
-                passwordInput.focus();
+            const authenticationData = {
+                Username: email,
+                Password: password
+            };
 
-                // Shake animation for error
-                authForm.style.animation = 'none';
-                setTimeout(() => {
-                    authForm.style.animation = '';
-                }, 10);
-            }
+            const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
+
+            const userData = {
+                Username: email,
+                Pool: userPool
+            };
+
+            const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
+            cognitoUser.authenticateUser(authenticationDetails, {
+                onSuccess: function(session) {
+                    console.log('Authentication successful');
+                    currentSession = session;
+                    passwordInput.value = '';
+                    authButton.disabled = false;
+                    authButton.textContent = 'Sign In';
+                    showMainContent();
+                    setupFileDownloads();
+                },
+
+                onFailure: function(err) {
+                    console.error('Authentication failed:', err);
+                    errorMessage.textContent = err.message || 'Invalid credentials. Please try again.';
+                    errorMessage.classList.add('visible');
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                    authButton.disabled = false;
+                    authButton.textContent = 'Sign In';
+                },
+
+                newPasswordRequired: function(userAttributes, requiredAttributes) {
+                    // Handle new password required (for temporary passwords)
+                    errorMessage.textContent = 'Please contact the administrator to reset your password.';
+                    errorMessage.classList.add('visible');
+                    authButton.disabled = false;
+                    authButton.textContent = 'Sign In';
+                }
+            });
         });
 
         // Handle logout
         logoutButton.addEventListener('click', function() {
-            localStorage.removeItem(STORAGE_KEY);
-            passwordInput.value = '';
-            errorMessage.classList.remove('visible');
-            showAuthModal();
+            const cognitoUser = userPool.getCurrentUser();
+            if (cognitoUser) {
+                cognitoUser.signOut();
+            }
+            currentSession = null;
+            window.location.href = 'https://coming-soon.altivum.ai/';
         });
+
+        // Setup file downloads with signed URLs
+        function setupFileDownloads() {
+            const fileCards = filesGrid.querySelectorAll('.file-card[data-file-key]');
+
+            fileCards.forEach(card => {
+                card.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    const fileKey = this.getAttribute('data-file-key');
+
+                    if (!currentSession) {
+                        alert('Session expired. Please sign in again.');
+                        showAuthModal();
+                        return;
+                    }
+
+                    try {
+                        const idToken = currentSession.getIdToken().getJwtToken();
+
+                        // Call API to get signed URL
+                        const response = await fetch(API_ENDPOINT, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': idToken
+                            },
+                            body: JSON.stringify({ fileKey })
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('Failed to get download URL');
+                        }
+
+                        const data = await response.json();
+
+                        // Download file using signed URL
+                        const link = document.createElement('a');
+                        link.href = data.url;
+                        link.download = fileKey;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+
+                    } catch (error) {
+                        console.error('Download error:', error);
+                        alert('Failed to download file. Please try again.');
+                    }
+                });
+            });
+        }
 
         // Initialize on page load
         checkAuth();
-
-        // Example function to add files dynamically (for future use)
-        function addFile(fileData) {
-            const filesGrid = document.getElementById('filesGrid');
-            const emptyState = filesGrid.querySelector('.empty-state');
-
-            // Remove empty state if it exists
-            if (emptyState) {
-                emptyState.remove();
-            }
-
-            const fileCard = document.createElement('a');
-            fileCard.className = 'file-card';
-            fileCard.href = fileData.url || '#';
-            fileCard.target = fileData.external ? '_blank' : '_self';
-
-            fileCard.innerHTML = `
-                <div class="file-icon">${fileData.icon || '📄'}</div>
-                <div class="file-info">
-                    <div class="file-name">${fileData.name}</div>
-                    ${fileData.description ? `<div class="file-description">${fileData.description}</div>` : ''}
-                </div>
-                ${fileData.meta ? `<div class="file-meta">${fileData.meta}</div>` : ''}
-            `;
-
-            filesGrid.appendChild(fileCard);
-        }
-
-        // Example usage (commented out):
-        /*
-        addFile({
-            name: 'Program Overview',
-            description: 'Introduction to the VetROI pilot program objectives and timeline',
-            icon: '📋',
-            url: 'files/overview.pdf',
-            meta: 'PDF • 2.4 MB',
-            external: false
-        });
-        */
     </script>
 </body>
 </html>
