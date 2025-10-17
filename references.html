@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research References - VetROI | Altivum™ Inc.</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            min-height: 100vh;
+            font-family: 'Helvetica Neue', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #001a4d 0%, #002868 50%, #003a8c 100%);
+        }
+
+        /* Header Section */
+        .references-header {
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .references-title {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: #FFFFFF;
+            letter-spacing: 0.05em;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .home-link {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: #FFFFFF;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .home-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Content Section */
+        .content-container {
+            padding: 3rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-intro {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .section-intro h2 {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 1.75rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            letter-spacing: 0.02em;
+        }
+
+        .section-intro p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Files Grid */
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .file-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .file-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .file-icon {
+            width: 56px;
+            height: 56px;
+            background: #002868;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.75rem;
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #002868;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.02em;
+            line-height: 1.4;
+        }
+
+        .file-description {
+            font-size: 0.875rem;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-meta {
+            font-size: 0.75rem;
+            color: #999;
+            letter-spacing: 0.05em;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .file-details {
+            font-size: 0.8125rem;
+            color: #555;
+            line-height: 1.5;
+            margin-top: 0.25rem;
+        }
+
+        /* Footer */
+        .references-footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.875rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .references-footer a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .references-footer a:hover {
+            color: #FFFFFF;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .references-header {
+                padding: 1.5rem;
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .references-title {
+                font-size: 1.75rem;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .content-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .files-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-intro h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .references-header {
+                padding: 1rem;
+            }
+
+            .references-title {
+                font-size: 1.5rem;
+            }
+
+            .content-container {
+                padding: 1.5rem 1rem;
+            }
+
+            .home-link {
+                padding: 0.625rem 1.25rem;
+                font-size: 0.7rem;
+            }
+
+            .file-name {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="references-header">
+        <h1 class="references-title">VetROI Research References</h1>
+        <div class="header-actions">
+            <a href="index.html" class="home-link">Home</a>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content-container">
+        <div class="section-intro">
+            <h2>Peer-Reviewed Research & References</h2>
+            <p>Supporting research and academic publications informing the VetROI platform development</p>
+        </div>
+
+        <div class="files-grid">
+            <!-- Reference Card -->
+            <a href="References/The%20Impact%20of%20AI%20on%20Veteran%20Employment.pdf" class="file-card" target="_blank" rel="noopener noreferrer">
+                <div class="file-icon">📄</div>
+                <div class="file-info">
+                    <div class="file-name">The Impact of AI on Veteran Employment</div>
+                    <div class="file-description">Academic research examining artificial intelligence applications in veteran career transitions and workforce integration.</div>
+                    <div class="file-details">Explores AI-driven approaches to veteran employment optimization and career pathway analysis.</div>
+                </div>
+                <div class="file-meta">PDF • 685 KB • Opens in new tab</div>
+            </a>
+
+            <!-- Add more reference cards here as you upload new papers -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="references-footer">
+        <a href="https://altivum.ai" target="_blank" rel="noopener noreferrer">
+            ALTIVUM INC.
+        </a>
+        &nbsp;|&nbsp;
+        Veteran Owned & Operated
+        &nbsp;|&nbsp;
+        EST. 2025
+    </div>
+</body>
+</html>
