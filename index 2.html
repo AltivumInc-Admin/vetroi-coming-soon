@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Service | Your ROI - Coming Soon to Altivum™ Inc.</title>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Your Service | Your ROI - Coming Soon to Altivum™ Inc.">
+    <meta property="og:description" content="Veteran-owned software company. Your service deserves the best return on investment. Coming soon.">
+    <meta property="og:image" content="https://coming-soon.altivum.ai/flag.png">
+    <meta property="og:url" content="https://coming-soon.altivum.ai">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Your Service | Your ROI - Coming Soon to Altivum™ Inc.">
+    <meta name="twitter:description" content="Veteran-owned software company. Your service deserves the best return on investment. Coming soon.">
+    <meta name="twitter:image" content="https://coming-soon.altivum.ai/flag.png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        video {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .overlay {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content {
+            text-align: center;
+            padding: 0 2rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+            }
+            15% {
+                opacity: 1;
+            }
+            85% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .tagline-line {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 4.5rem;
+            font-weight: 300;
+            color: #FFFFFF;
+            letter-spacing: 0.02em;
+            line-height: 1.4;
+            text-shadow:
+                0 4px 8px rgba(0, 0, 0, 0.9),
+                0 8px 16px rgba(0, 0, 0, 0.7),
+                2px 2px 4px rgba(0, 0, 0, 1);
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
+        }
+
+        .tagline-line:nth-child(1) {
+            animation-delay: 0.5s;
+        }
+
+        .tagline-line:nth-child(2) {
+            animation-delay: 1.5s;
+            margin-bottom: 2rem;
+        }
+
+        .coming-soon {
+            font-family: 'Helvetica Neue', 'Arial', sans-serif;
+            font-size: 4rem;
+            font-weight: 300;
+            color: #FFFFFF;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            text-shadow:
+                0 0 20px rgba(0, 0, 0, 0.9),
+                0 0 40px rgba(0, 0, 0, 0.8),
+                0 4px 8px rgba(0, 0, 0, 0.9),
+                0 8px 16px rgba(0, 0, 0, 0.7),
+                2px 2px 4px rgba(0, 0, 0, 1);
+            -webkit-text-stroke: 1px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
+            animation-delay: 1.5s;
+            margin-bottom: 2rem;
+        }
+
+        .cta-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            font-family: 'Helvetica Neue', 'Arial', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: #002868;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
+            animation-delay: 2.5s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .cta-button:hover {
+            background: #FFFFFF;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .cta-button:active {
+            transform: translateY(-1px);
+        }
+
+        .cta-button.secondary {
+            background: rgba(0, 40, 104, 0.9);
+            color: #FFFFFF;
+        }
+
+        .cta-button.secondary:hover {
+            background: rgba(0, 40, 104, 1);
+        }
+
+        .tagline {
+            margin-bottom: 2rem;
+            font-family: 'Helvetica Neue', 'Arial', sans-serif;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            animation: fadeInOut 8s ease-in-out forwards;
+            animation-delay: 0.3s;
+        }
+
+        .tagline-line1 {
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .tagline-line2 {
+            font-size: 0.75rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 2rem;
+            font-family: 'Helvetica Neue', 'Arial', sans-serif;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
+            animation-delay: 4.5s;
+        }
+
+        .footer a {
+            text-decoration: none;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer a:hover {
+            opacity: 0.8;
+        }
+
+        .footer-company {
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .footer-descriptor {
+            font-size: 0.75rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .header {
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+            font-family: 'Helvetica Neue', 'Arial', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 0.25rem;
+            text-transform: uppercase;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
+            animation-delay: 5s;
+        }
+
+        @media (max-width: 768px) {
+            .tagline-line {
+                font-size: 2.5rem;
+            }
+
+            .coming-soon {
+                font-size: 2rem;
+            }
+
+            .cta-container {
+                gap: 0.75rem;
+            }
+
+            .cta-button {
+                font-size: 0.75rem;
+                padding: 0.875rem 2rem;
+            }
+
+            .tagline {
+                margin-top: 2rem;
+            }
+
+            .tagline-line1, .tagline-line2 {
+                font-size: 0.65rem;
+            }
+
+            .footer {
+                bottom: 1rem;
+                left: 1rem;
+            }
+
+            .header {
+                top: 1rem;
+                right: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tagline-line {
+                font-size: 1.75rem;
+            }
+
+            .coming-soon {
+                font-size: 1.5rem;
+            }
+
+            .cta-container {
+                gap: 0.5rem;
+            }
+
+            .cta-button {
+                font-size: 0.7rem;
+                padding: 0.75rem 1.5rem;
+            }
+
+            .tagline {
+                margin-top: 1.5rem;
+            }
+
+            .tagline-line1, .tagline-line2 {
+                font-size: 0.6rem;
+            }
+
+            .footer-company, .footer-descriptor {
+                font-size: 0.625rem;
+            }
+
+            .header {
+                font-size: 0.625rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <video autoplay loop muted playsinline>
+        <source src="media/us_flag.mov" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="overlay">
+        <div class="header">EST. 2025</div>
+        <div class="content">
+            <div class="tagline">
+                <div class="tagline-line1">Your Service.</div>
+                <div class="tagline-line2">Your ROI.</div>
+            </div>
+            <div class="coming-soon">Coming Soon</div>
+            <div class="cta-container">
+                <a href="stay-informed.html" class="cta-button">Stay Informed</a>
+                <a href="pilot.html" class="cta-button secondary">Pilot Program</a>
+            </div>
+        </div>
+        <div class="footer">
+            <a href="https://altivum.ai" target="_blank" rel="noopener noreferrer">
+                <div class="footer-company">ALTIVUM INC.</div>
+                <div class="footer-descriptor">Veteran Owned & Operated</div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
